@@ -1,6 +1,6 @@
 node_modules
 *.js
-.bash_hostory
+.bash_history
 .lesshst
 .npm
 .viminfo

@@ -7,14 +7,20 @@ fi
 
 . .env 
 
-LDAP_ADMIN_PASSWORD=$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)
-LDAP_READONLY_USER_PASSWORD=$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)
-LAM_PASSWORD=$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)
-MINIO_ROOT_PASSWORD=$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)
-KEYCLOAK_DB_PASSWORD=$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)
-KEYCLOAK_ADMIN_PASSWORD=$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)
-SPARK_DB_PASSWORD=$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)
-
+if [ -f ./.password ]; then
+	. ./.password
+else
+cat << EOF > ./.password
+LDAP_ADMIN_PASSWORD='$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)'
+LDAP_READONLY_USER_PASSWORD='$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)'
+LAM_PASSWORD='$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)'
+MINIO_ROOT_PASSWORD='$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)'
+KEYCLOAK_DB_PASSWORD='$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)'
+KEYCLOAK_ADMIN_PASSWORD='$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)'
+SPARK_DB_PASSWORD='$(pwgen -1 -c -B -y -n -r "\$&;:><*\"\'\` \\" 32)'
+EOF
+. ./.password
+fi
 
 cat << EOF > LDAP/.env
 DOMAIN_NAME=${DOMAIN_NAME}
@@ -22,9 +28,9 @@ DOMAIN_NAME=${DOMAIN_NAME}
 LDAP_ORGANISATION=${LDAP_ORGANISATION}
 LDAP_DOMAIN=${LDAP_DOMAIN}
 LDAP_BASE_DN=${LDAP_BASE_DN}
-LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
-LDAP_READONLY_USER_PASSWORD=${LDAP_READONLY_USER_PASSWORD}
-LAM_PASSWORD=${LAM_PASSWORD}
+LDAP_ADMIN_PASSWORD='${LDAP_ADMIN_PASSWORD}'
+LDAP_READONLY_USER_PASSWORD='${LDAP_READONLY_USER_PASSWORD}'
+LAM_PASSWORD='${LAM_PASSWORD}'
 EOF
 
 sed "s/__DOMAIN_NAME__/${DOMAIN_NAME}/g" LDAP/conf/nginx.conf.org > LDAP/conf/nginx.conf
@@ -32,7 +38,7 @@ sed "s/__DOMAIN_NAME__/${DOMAIN_NAME}/g" LDAP/conf/nginx.conf.org > LDAP/conf/ng
 cat << EOF > MinIO/.env
 DOMAIN_NAME=${DOMAIN_NAME}
 MINIO_ROOT_USER=${MINIO_ROOT_USER}
-MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+MINIO_ROOT_PASSWORD='${MINIO_ROOT_PASSWORD}'
 EOF
 
 sed "s/__DOMAIN_NAME__/${DOMAIN_NAME}/g" MinIO/conf/nginx.conf.org > MinIO/conf/nginx.conf
@@ -40,9 +46,9 @@ sed "s/__DOMAIN_NAME__/${DOMAIN_NAME}/g" MinIO/conf/nginx.conf.org > MinIO/conf/
 cat << EOF > keycloak/.env 
 DOMAIN_NAME=${DOMAIN_NAME}
 KEYCLOAK_DB_USERNAME=${KEYCLOAK_DB_USERNAME}
-KEYCLOAK_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+KEYCLOAK_DB_PASSWORD='${KEYCLOAK_DB_PASSWORD}'
 KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+KEYCLOAK_ADMIN_PASSWORD='${KEYCLOAK_ADMIN_PASSWORD}'
 EOF
 
 sed "s/__DOMAIN_NAME__/${DOMAIN_NAME}/g" keycloak/kc.sh.org > keycloak/kc.sh
@@ -55,11 +61,13 @@ fi
 cat << EOF > spark/.env
 DOMAIN_NAME=${DOMAIN_NAME}
 MINIO_ROOT_USER=${MINIO_ROOT_USER}
-MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+MINIO_ROOT_PASSWORD='${MINIO_ROOT_PASSWORD}'
 SPARK_CATALOG_NAME=${SPARK_CATALOG_NAME}
+SPARK_ENDPOINT_NAME=${SPARK_ENDPOINT_NAME}
 SPARK_DB_NAME=${SPARK_DB_NAME}
 SPARK_DB_USERNAME=${SPARK_DB_NAME}
-SPARK_DB_PASSWORD=${SPARK_DB_PASSWORD}
+SPARK_DB_PASSWORD='${SPARK_DB_PASSWORD}'
+SPARK_WAREHOUSE_NAME=${SPARK_WAREHOUSE_NAME}
 EOF
 
 sed "s/__DOMAIN_NAME__/${DOMAIN_NAME}/g" spark/Dockerfile.org > spark/Dockerfile

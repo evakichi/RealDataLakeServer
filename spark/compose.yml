@@ -1,7 +1,7 @@
 services:
-  spark:
-    container_name: spark
-    hostname: spark
+  spark-server:
+    container_name: spark-server
+    hostname: spark-server
     build: .
 #    ports:
 #      - 8083:8080
@@ -19,21 +19,23 @@ services:
       - AWS_REGION=us-east-1
       - TZ=Asia/Tokyo
     networks:
-      spark-iceberg-network:
+      spark-iceberg-server-network:
         ipv4_address: 172.20.4.101
     restart: always
     depends_on:
-      - db
+      - spark-server-db
 
-  db:
+  spark-server-db:
     image: postgres:latest
-    container_name: db
-    hostname: db
+    container_name: spark-server-db
+    hostname: spark-server-db
+    ports:
+      - 5432:5432
     networks:
-      spark-iceberg-network:
+      spark-iceberg-server-network:
         ipv4_address: 172.20.4.102
     volumes:
-      - db-store:/var/lib/postgresql/data
+      - spark-server-db-store:/var/lib/postgresql/data
     tty: true
     restart: always
     environment:
@@ -43,7 +45,7 @@ services:
       - POSTGRES_DB=${SPARK_DB_NAME}
 
 networks:
-  spark-iceberg-network:
+  spark-iceberg-server-network:
     driver: bridge
     ipam:
       driver: default
@@ -51,4 +53,4 @@ networks:
       - subnet: 172.20.4.0/24
         gateway: 172.20.4.1
 volumes:
-  db-store:
+  spark-server-db-store:

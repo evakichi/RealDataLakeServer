@@ -16,7 +16,7 @@ docker volume rm minio_minio-volume
 
 cd ../spark
 docker compose down 
-docker volume rm spark_db-store
+docker volume rm spark_spark-server-db-store
 
 cd ../admin-tool
 docker compose down 
