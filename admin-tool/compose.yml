@@ -1,0 +1,40 @@
+services:
+  admin-tool:
+    container_name: admin-tool
+    hostname: admin-tool
+    build: .
+    environment:
+      - TZ=Asia/Tokyo
+      - DOMAIN_NAME=${DOMAIN_NAME}
+      - LDAP_ORGANISATION=${LDAP_ORGANISATION}
+      - LDAP_DOMAIN=${LDAP_DOMAIN}
+      - LDAP_BASE_DN=${LDAP_BASE_DN}
+      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
+      - LDAP_READONLY_USER_PASSWORD=${LDAP_READONLY_USER_PASSWORD}
+      - LAM_PASSWORD=${LAM_PASSWORD}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - KEYCLOAK_DB_USERNAME=${KEYCLOAK_DB_USERNAME}
+      - KEYCLOAK_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - SPARK_CATALOG_NAME=${SPARK_CATALOG_NAME}
+      - SPARK_DB_NAME=${SPARK_DB_NAME}
+      - SPARK_DB_USERNAME=${SPARK_DB_USERNAME}
+      - SPARK_DB_PASSWORD=${SPARK_DB_PASSWORD}
+    volumes:
+      - ./tool/:/home/tool/
+    tty: true
+    networks:
+      keycloak-network:
+        ipv4_address: 172.20.5.101
+    restart: always
+
+networks:
+  keycloak-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.20.5.0/24
+        gateway: 172.20.5.1

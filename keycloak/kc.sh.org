@@ -1,7 +1,7 @@
 #!/bin/sh
 
-cat /opt/certs/__DOMAIN__.ca.crt >> /etc/ssl/certs/ca-bundle.trust.crt
-cat /opt/certs/__DOMAIN__.ca.crt >> /etc/ssl/certs/ca-bundle.crt
+cat /opt/certs/__DOMAIN_NAME__.ca.crt >> /etc/ssl/certs/ca-bundle.trust.crt
+cat /opt/certs/__DOMAIN_NAME__.ca.crt >> /etc/ssl/certs/ca-bundle.crt
 
 case "$(uname)" in
     CYGWIN*)

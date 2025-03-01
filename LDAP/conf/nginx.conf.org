@@ -14,17 +14,17 @@ events {
 http {
 	server {
 		listen 	80;
-		server_name __DOMAIN__;
+		server_name __DOMAIN_NAME__;
 		return	301 https://$http_host$request_uri;
 	}
 	server {
 		listen       443 ssl;
 		listen  [::]:443 ssl;
-		server_name  __DOMAIN__;
+		server_name  __DOMAIN_NAME__;
 		ssl_protocols TLSv1.3;
 
-		ssl_certificate /opt/certs/__DOMAIN__.crt;
-		ssl_certificate_key /opt/certs/__DOMAIN__.key;
+		ssl_certificate /opt/certs/__DOMAIN_NAME__.crt;
+		ssl_certificate_key /opt/certs/__DOMAIN_NAME__.key;
 
 		# Allow special characters in headers
 		ignore_invalid_headers off;
