@@ -18,13 +18,25 @@ services:
       - POSTGRES_PASSWORD=${SPARK_DB_PASSWORD}
       - POSTGRES_DB=${SPARK_DB_NAME}
 
+  adminer-nginx:
+    container_name: adminer-nginx
+    hostname: adminer-nginx
+    image: nginx:stable-alpine3.19-perl
+    volumes:
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf
+      - ../certs/${DOMAIN_NAME}.crt:/opt/certs/${DOMAIN_NAME}.crt:ro
+      - ../certs/${DOMAIN_NAME}.key:/opt/certs/${DOMAIN_NAME}.key:ro
+    ports:
+      - 8445:443
+    networks:
+      pgsql-network:
+        ipv4_address: 172.20.5.100
+        
   adminer:
     container_name: adminer
     hostname: adminer
     image: adminer
     restart: always
-    ports:
-      - 8080:8080
     networks:
       pgsql-network:
         ipv4_address: 172.20.5.102

@@ -65,6 +65,8 @@ SPARK_DB_USERNAME='${SPARK_DB_NAME}'
 SPARK_DB_PASSWORD='${SPARK_DB_PASSWORD}'
 EOF
 
+sed "s/__DOMAIN_NAME__/${DOMAIN_NAME}/g" pgsql/conf/nginx.conf.org > pgsql/conf/nginx.conf
+
 cat << EOF > spark/.env
 DOMAIN_NAME='${DOMAIN_NAME}'
 MINIO_ROOT_USER='${MINIO_ROOT_USER}'
