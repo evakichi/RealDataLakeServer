@@ -1,25 +1,37 @@
 #!/bin/bash
 
 cd LDAP
-docker compose down
-docker volume rm ldap_ldap-config
-docker volume rm ldap_ldap-data
+if ! ./finalize.sh; then
+	echo "err"
+	exit 200
+fi
 
 cd ../keycloak
-docker compose down 
-docker volume rm keycloak_keycloak-db-store
-docker volume rm keycloak_keycloak-volume
+if ! ./finalize.sh; then
+	echo "err"
+	exit 201
+fi
 
 cd ../MinIO
-docker compose down
-docker volume rm minio_minio-volume
+if ! ./finalize.sh; then
+	echo "err"
+	exit 202
+fi
 
 cd ../pgsql
-docker compose down 
-docker volume rm pgsql_pgsql-store
+if ! ./finalize.sh; then
+	echo "err"
+	exit 203
+fi
 
 cd ../spark
-docker compose down 
+if ! ./finalize.sh; then
+	echo "err"
+	exit 204
+fi
 
 cd ../admin-tool
-docker compose down 
+if ! ./finalize.sh; then
+	echo "err"
+	exit 205
+fi
