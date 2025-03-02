@@ -14,9 +14,12 @@ cd ../MinIO
 docker compose down
 docker volume rm minio_minio-volume
 
+cd ../pgsql
+docker compose down 
+docker volume rm pgsql_pgsql-store
+
 cd ../spark
 docker compose down 
-docker volume rm spark_spark-server-db-store
 
 cd ../admin-tool
 docker compose down 

@@ -22,27 +22,6 @@ services:
       spark-iceberg-server-network:
         ipv4_address: 172.20.4.101
     restart: always
-    depends_on:
-      - spark-server-db
-
-  spark-server-db:
-    image: postgres:latest
-    container_name: spark-server-db
-    hostname: spark-server-db
-    ports:
-      - 5432:5432
-    networks:
-      spark-iceberg-server-network:
-        ipv4_address: 172.20.4.102
-    volumes:
-      - spark-server-db-store:/var/lib/postgresql/data
-    tty: true
-    restart: always
-    environment:
-      - TZ=Asia/Tokyo
-      - POSTGRES_USER=${SPARK_DB_USERNAME}
-      - POSTGRES_PASSWORD=${SPARK_DB_PASSWORD}
-      - POSTGRES_DB=${SPARK_DB_NAME}
 
 networks:
   spark-iceberg-server-network:
@@ -52,5 +31,5 @@ networks:
       config:
       - subnet: 172.20.4.0/24
         gateway: 172.20.4.1
-volumes:
-  spark-server-db-store:
+#volumes:
+#  spark-server-db-store:

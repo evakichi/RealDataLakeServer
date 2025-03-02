@@ -8,7 +8,7 @@ RUN cd /usr/share/ca-certificates && cp /certs/lets-note.lan.ca.crt mylocal/
 RUN echo "mylocal/lets-note.lan.ca.crt" >> /etc/ca-certificates.conf
 RUN update-ca-certificates
 
-RUN apt update && apt upgrade && apt install -y npm vim less curl
+RUN apt update && apt upgrade && apt install -y npm vim less curl postgresql-client 
 
 RUN cd / && curl https://dl.min.io/client/mc/release/linux-amd64/mc --create-dirs -o /minio-binaries/mc && \
     chmod +x /minio-binaries/mc

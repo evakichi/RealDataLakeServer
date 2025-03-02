@@ -27,7 +27,7 @@ services:
     tty: true
     networks:
       keycloak-network:
-        ipv4_address: 172.20.5.101
+        ipv4_address: 172.20.10.101
     restart: always
 
 networks:
@@ -36,5 +36,5 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 172.20.5.0/24
-        gateway: 172.20.5.1
+      - subnet: 172.20.10.0/24
+        gateway: 172.20.10.1

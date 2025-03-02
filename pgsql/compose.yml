@@ -1,0 +1,32 @@
+services:
+  pgsql:
+    image: postgres:latest
+    container_name: pgsql
+#    build: .
+    hostname: gpsql
+    ports:
+      - 5432:5432
+    networks:
+      pgsql-network:
+        ipv4_address: 172.20.5.102
+    volumes:
+      - pgsql-store:/var/lib/postgresql/data
+#      - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    tty: true
+    restart: always
+    environment:
+      - TZ=Asia/Tokyo
+      - POSTGRES_USER=${SPARK_DB_USERNAME}
+      - POSTGRES_PASSWORD=${SPARK_DB_PASSWORD}
+      - POSTGRES_DB=${SPARK_DB_NAME}
+
+networks:
+  pgsql-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.20.5.0/24
+        gateway: 172.20.5.1
+volumes:
+  pgsql-store:
