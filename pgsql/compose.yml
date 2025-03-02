@@ -2,16 +2,14 @@ services:
   pgsql:
     image: postgres:latest
     container_name: pgsql
-#    build: .
     hostname: gpsql
     ports:
       - 5432:5432
     networks:
       pgsql-network:
-        ipv4_address: 172.20.5.102
+        ipv4_address: 172.20.5.101
     volumes:
       - pgsql-store:/var/lib/postgresql/data
-#      - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     tty: true
     restart: always
     environment:
@@ -19,6 +17,17 @@ services:
       - POSTGRES_USER=${SPARK_DB_USERNAME}
       - POSTGRES_PASSWORD=${SPARK_DB_PASSWORD}
       - POSTGRES_DB=${SPARK_DB_NAME}
+
+  adminer:
+    container_name: adminer
+    hostname: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      pgsql-network:
+        ipv4_address: 172.20.5.102
 
 networks:
   pgsql-network:
