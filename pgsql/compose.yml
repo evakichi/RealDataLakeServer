@@ -10,6 +10,8 @@ services:
         ipv4_address: 172.20.5.101
     volumes:
       - pgsql-store:/var/lib/postgresql/data
+      - ./certs/${DOMAIN_NAME}.crt:/var/lib/postgresql/${DOMAIN_NAME}.crt:ro
+      - ./certs/${DOMAIN_NAME}.key:/var/lib/postgresql/${DOMAIN_NAME}.key:ro
     tty: true
     restart: always
     environment:
@@ -17,6 +19,7 @@ services:
       - POSTGRES_USER=${SPARK_DB_USERNAME}
       - POSTGRES_PASSWORD=${SPARK_DB_PASSWORD}
       - POSTGRES_DB=${SPARK_DB_NAME}
+    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/${DOMAIN_NAME}.crt -c ssl_key_file=/var/lib/postgresql/${DOMAIN_NAME}.key
 
   adminer-nginx:
     container_name: adminer-nginx
